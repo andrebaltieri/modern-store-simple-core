@@ -7,5 +7,6 @@ namespace ModernStore.Data.Contexts
     {
         public ModernStoreDataContext(DbContextOptions<ModernStoreDataContext> options) : base(options) { }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

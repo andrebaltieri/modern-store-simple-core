@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModernStore.Data.Transaction;
 using ModernStore.Domain.Commands;
@@ -8,20 +9,19 @@ namespace ModernStore.Controllers
 {
     public class CustomerController : BaseController
     {
-        private readonly IUnitOfWork _uow;
         private readonly ICustomerRepository _repository;
         private readonly CustomerCommandHandler _handler;
 
 
         public CustomerController(IUnitOfWork uow, ICustomerRepository repository, CustomerCommandHandler handler) : base(uow)
         {
-            _uow = uow;
             _repository = repository;
             _handler = handler;
         }
 
         [HttpGet]
         [Route("v1/customers")]
+        [Authorize(Policy = "User")]
         public IActionResult Get()
         {
             return Ok(_repository.Get());
@@ -29,6 +29,7 @@ namespace ModernStore.Controllers
 
         [HttpPost]
         [Route("v1/customers")]
+        [Authorize(Policy = "Admin")]
         public IActionResult Post([FromBody]RegisterCustomerCommand command)
         {
             _handler.Handle(command);
